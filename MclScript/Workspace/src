@@ -1,0 +1,2 @@
+balls = 10 + 7 + 100
+print balls
