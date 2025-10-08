@@ -1,18 +1,12 @@
-$func(x,y)
+main()
 {
-    print x
-    print y
-    balls = 10 + 5
-    kek = input()
-    return kek + balls
+    a = test(1) + 100000;
+    print(a);
 }
 
-$main(x)
+test(ppp)
 {
-    a = log(func(1,2) + 100)
-}
-
-$log(x)
-{
-    print x
+    y = 3;
+    x = (4 * 100) - (((((3 * ppp) + 30 - (69 * 7) - (((4200))))))) + y;
+    return(x);
 }
