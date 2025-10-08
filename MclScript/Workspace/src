@@ -1,2 +1,18 @@
-balls = 10 + 7 + 100
-print balls
+$func(x,y)
+{
+    print x
+    print y
+    balls = 10 + 5
+    kek = input()
+    return kek + balls
+}
+
+$main(x)
+{
+    a = log(func(1,2) + 100)
+}
+
+$log(x)
+{
+    print x
+}
