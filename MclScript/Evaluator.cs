@@ -4,6 +4,7 @@ public class Evaluator
 {
     private const string RETURN_KEY = "return";
     private const string PRINT_KEY = "print";
+    private const string INPUT_KEY = "input";
     
     public static void Evaluate(Context context)
     { 
@@ -17,11 +18,8 @@ public class Evaluator
         string[][] expressions = func.Item2;
         Context subContext = new Context(context);
 
-        for (int i = 0; i < parameters.Length; i++)
-        {
-            if (i > paramValues.Length - 1) throw new Exception("Parameter Mismatch!");
-            subContext.varMap[parameters[i]] = paramValues[i];
-        }
+        if (paramValues.Length != parameters.Length) throw new Exception("Parameter Mismatch!");
+        for (int i = 0; i < parameters.Length; i++) subContext.varMap[parameters[i]] = paramValues[i];
         
         for (int i = 0; i < expressions.Length; i++)
         {
@@ -31,8 +29,34 @@ public class Evaluator
         return 0;
     }
 
+    private static int EvaluateFunctionCall(string name, string[] exp, Context context)
+    {
+        Console.WriteLine("function call: " + name + " -> " + MclScriptMain.ArrayToStr(exp));
+
+        List<int> expResults = new List<int>();
+        List<string> walk = new List<string>();
+        for (int i = 1; i < exp.Length - 1; i++)
+        {
+            string token = exp[i];
+            if (token == ",")
+            {
+                expResults.Add(EvaluateExpression(walk.ToArray(), context));
+                walk = new List<string>();
+            }
+            else walk.Add(token);
+        }
+        if (walk.Count > 0) expResults.Add(EvaluateExpression(walk.ToArray(), context));
+        
+        int tmp;
+        int[] paramValues = expResults.ToArray();
+        if (HandleBuiltInFunctions(name, paramValues, out tmp, context)) return tmp;
+        if (context.parent.funcMap.ContainsKey(name)) return EvaluateFunction(name, paramValues, context.parent);
+        throw new Exception("Unknown Function: " + name);
+    }
+
     private static int EvaluateExpression(string[] tokens, Context context)
     {
+        Console.WriteLine("tokens: "+ MclScriptMain.ArrayToStr(tokens));
         if (tokens.Length == 0) return -1;
         
         if (tokens.Length == 1)
@@ -62,12 +86,14 @@ public class Evaluator
             else if (i < len && d == 0)
             {
                 rexp.Reverse();
-                int l = EvaluateExpression(tokens[..i], context);
-                int r = EvaluateExpression(rexp.ToArray(), context);
-                int tmp;
-                if (HandleBuiltInFunctions(t, new int[] { r }, out tmp, context)) return tmp;
-                if (context.parent.funcMap.ContainsKey(t)) return EvaluateFunction(t, new int[] { r }, context.parent);
-                return HandleOperation(t, l, r);
+                string[] rexpArray = rexp.ToArray();
+                if ("+-*".Contains(t))
+                {
+                    int l = EvaluateExpression(tokens[..i], context);
+                    int r = EvaluateExpression(rexpArray, context);
+                    return ExecuteOperation(t, l, r);
+                }
+                else return EvaluateFunctionCall(t, rexpArray, context);
             }
 
             rexp.Add(t);
@@ -85,10 +111,16 @@ public class Evaluator
         switch (name)
         {
             case RETURN_KEY:
+                //if (paramValues.Length != 1) throw new Exception("Parameter Mismatch! " + paramValues.Length);
                 context.varMap[RETURN_KEY] = paramValues[0];
                 break;
             case PRINT_KEY:
+                //if (paramValues.Length != 1) throw new Exception("Parameter Mismatch! " + paramValues.Length);
                 Console.WriteLine(paramValues[0]);
+                break;
+            case INPUT_KEY:
+                //if (paramValues.Length != 0) throw new Exception("Parameter Mismatch! " + paramValues.Length);
+                result = int.Parse(Console.ReadLine());
                 break;
             default:
                 return false;
@@ -96,7 +128,7 @@ public class Evaluator
         return true;
     }
 
-    private static int HandleOperation(string op, int l, int r)
+    private static int ExecuteOperation(string op, int l, int r)
     {
         switch (op)
         {
@@ -111,6 +143,6 @@ public class Evaluator
                 break;
         }
 
-        throw new Exception("Unknown Operator: " + op);
+        throw new Exception("Invalid Operation: " + op);
     }
 }

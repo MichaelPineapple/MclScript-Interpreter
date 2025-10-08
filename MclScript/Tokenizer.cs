@@ -17,20 +17,16 @@ public class Tokenizer
         for (int i = 0; i < src.Length; i++)
         {
             char c = src[i];
-            
             if (!body)
             {
                 if (c == '(') { name = walk; walk = ""; c = '\0'; }
                 if (c == ')') { parameters = walk; walk = ""; c = '\0'; }
             }
-            
             if (c == '{') { body = true; c = '\0'; }
             if (c == '}')
             {
                 AcceptNewFunction(name, parameters, walk, context);
-                body = false;
-                walk = "";
-                c = '\0';
+                body = false; walk = ""; c = '\0';
             }
             if (c != '\0') walk += c;
         }
@@ -56,7 +52,7 @@ public class Tokenizer
         for (int i = 0; i < exp.Length; i++)
         {
             char c = exp[i];
-            if ("()+-*=".Contains(c))
+            if ("()+-*=,".Contains(c))
             {
                 if (walk.Length > 0) tokens.Add(walk);
                 tokens.Add(c.ToString());

@@ -1,6 +1,6 @@
 namespace MclScript;
 
-public class ExpressionHandler
+public class MclScriptMain
 {
     public static void Main(string[] args)
     {

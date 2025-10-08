@@ -1,6 +1,6 @@
 main()
 {
-    a = test(1) + 100000;
+    a = input(0) + input(1);
     print(a);
 }
 
