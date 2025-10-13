@@ -1,7 +1,22 @@
+# this is a comment
+
 main()
 {
-    x = z + ((5 + (420 - 0) * y / (69)));
+    x = test(0, a, b,) + ((5 + (420 - 0) * y / (test((a + b) / c + 3, 1+2-7, 69))));
+    if (a) 
+    {
+        while (1)
+        {
+            func();
+            y = 1;
+        }
+        return(c);
+    }
+    print(balls); #comment
     x = 5;
 }
 
-test(){}
+func(a, b, c)
+{
+    return(a);
+}

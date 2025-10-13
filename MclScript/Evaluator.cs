@@ -2,7 +2,9 @@ namespace MclScript;
 
 public class Evaluator
 {
-    private static Dictionary<string, int> Variables = new Dictionary<string, int>();
+    private const bool DEBUG = false;
+    
+    //private static Dictionary<string, int> Variables = new Dictionary<string, int>();
     private static Token[] Tokens;
     private static int Index = 0;
     
@@ -12,6 +14,20 @@ public class Evaluator
         Index = 0;
         Global();
     }
+
+    private static void Debug(string str)
+    {
+        if (DEBUG)
+        {
+            Console.WriteLine(str);
+            Thread.Sleep(1000);
+        }
+    }
+    
+    // private static void Gen(string op, string x = "", string y = "")
+    // {
+    //     Console.WriteLine(op + " " + x + " " + y);
+    // }
 
     private static bool Peek(string type)
     {
@@ -23,16 +39,14 @@ public class Evaluator
         return Tokens[Index].Type;
     }
 
-    private static void Accept(string type)
+    private static string Accept(string type)
     {
-        string tt = Tokens[Index].Type;
-        if (tt != type)
-        {
-            Console.WriteLine("\n");
-            throw new Exception("Unexpected Token: '" + type + "' -> '" + tt + "'");
-        }
-        Console.Write(tt + " ");
+        Token t = Tokens[Index];
+        string tt = t.Type;
+        if (tt != type) throw new Exception("Expected '" + type + "' But Got '" + tt + "'");
+        Debug(tt + " ");
         Index++;
+        return t.Value;
     }
     
     private static void Global()
@@ -44,47 +58,92 @@ public class Evaluator
 
     private static void FunctionDefinition()
     {
-        Accept("i");
+        if (!Peek("i")) return;
+        string lbl = Accept("i");
         Accept("(");
-        FunctionSignature();
+        if (Peek("i")) ParametersDefinition();
         Accept(")");
-        Accept("{");
-        Local();
-        Accept("}");
+        Block();
     }
 
-    private static void FunctionSignature()
+    private static void ParametersDefinition()
     {
-        // Params
+        Accept("i");
+        if (!Peek(",")) return;
+        Accept(",");
+        ParametersDefinition();
     }
 
     private static void Local()
     {
-        if (Peek("i")) Assignment();
-        if (!Peek("}")) Local();
+        if (Peek("i")) Statement();
+        else if (Peek("c")) Conditional();
+        else return;
+        Local();
     }
-
-    private static void Assignment()
+    
+    private static void Statement()
     {
         Accept("i");
-        Accept("=");
-        Expression();
+        if (Peek("="))
+        {
+            Accept("=");
+            Expression();
+        }
+        else ParametersBlock();
         Accept(";");
+    }
+
+    private static void Conditional()
+    {
+        Accept("c");
+        ExpressionBlock();
+        Block();
     }
     
     private static void Expression()
     {
         if (Peek("n")) Accept("n");
-        else if (Peek("i")) Accept("i");
-        else if (Peek("("))
+        else if (Peek("i"))
         {
-            Accept("(");
-            Expression();
-            Accept(")");
+            Accept("i");
+            if (Peek("(")) ParametersBlock();
         }
+        else if (Peek("(")) ExpressionBlock();
         string op = Get();
         if (!"+-*/".Contains(op)) return;
         Accept(op);
         Expression();
+    }
+
+    private static void Parameters()
+    {
+        Expression();
+        if (Peek(","))
+        {
+            Accept(",");
+            Parameters();
+        }
+    }
+    
+    private static void Block()
+    {
+        Accept("{");
+        Local();
+        Accept("}");
+    }
+
+    private static void ExpressionBlock()
+    {
+        Accept("(");
+        Expression();
+        Accept(")");
+    }
+
+    private static void ParametersBlock()
+    {
+        Accept("(");
+        Parameters();
+        Accept(")");
     }
 }
