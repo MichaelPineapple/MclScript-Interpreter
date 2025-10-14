@@ -4,15 +4,17 @@ public class Evaluator
 {
     private const bool DEBUG = false;
     
-    //private static Dictionary<string, int> Variables = new Dictionary<string, int>();
+    private static Dictionary<string, int> FunctionPointers = new Dictionary<string, int>();
+    private static List<Instruction> InstructionsList = new List<Instruction>();
     private static Token[] Tokens;
     private static int Index = 0;
     
-    public static void Evaluate(Token[] tokens)
+    public static Instruction[] Evaluate(Token[] tokens)
     {
         Tokens = tokens;
         Index = 0;
         Global();
+        return InstructionsList.ToArray();
     }
 
     private static void Debug(string str)
@@ -24,10 +26,11 @@ public class Evaluator
         }
     }
     
-    // private static void Gen(string op, string x = "", string y = "")
-    // {
-    //     Console.WriteLine(op + " " + x + " " + y);
-    // }
+    private static int Asm(OpCode op, int x, int y = 0, bool addr = false)
+    {
+        InstructionsList.Add(new Instruction(op, x, y, addr));
+        return InstructionsList.Count - 1;
+    }
 
     private static bool Peek(string type)
     {
@@ -60,6 +63,7 @@ public class Evaluator
     {
         if (!Peek("i")) return;
         string lbl = Accept("i");
+        FunctionPointers[lbl] = Asm(OpCode.NOP, 0);
         Accept("(");
         if (Peek("i")) ParametersDefinition();
         Accept(")");
