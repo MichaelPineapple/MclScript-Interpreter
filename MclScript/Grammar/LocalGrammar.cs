@@ -162,6 +162,7 @@ public class LocalGrammar : Grammar
         Accept("(");
         int[] paramVals = Parameters().ToArray();
         Accept(")");
+        if (!ExecuteMode) return 0;
         int v = 0;
         if (HandleBuiltInFunctions(i, paramVals, out v)) return v;
         else
@@ -191,10 +192,10 @@ public class LocalGrammar : Grammar
         switch (i)
         {
             case "print":
-                if (ExecuteMode) Console.WriteLine(v[0]);
+                Console.WriteLine(v[0]);
                 break;
             case "input":
-                if (ExecuteMode) o = int.Parse(Console.ReadLine());
+                o = int.Parse(Console.ReadLine());
                 break;
             default:
                 return false;

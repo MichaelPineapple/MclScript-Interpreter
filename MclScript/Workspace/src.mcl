@@ -2,6 +2,10 @@
 
 main()
 {       
+    f = fib(20);
+    print(f);
+    print(999999999);
+
     e = calculate(1000);
     print(e);
     print(999999999);
@@ -36,6 +40,13 @@ func(x, y, z)
     else (1) {
         return = ((x+y)-z);
     }
+}
+
+# fibb
+fib(n)
+{
+    if (n < 2) { return = n; }
+    else (1) { return = fib(n - 1) + fib(n - 2); }
 }
 
 # Get all integers below 'n' that are multiples of 3 or 5
