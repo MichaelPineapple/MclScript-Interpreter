@@ -2,7 +2,7 @@
 
 The interpreter for my custom programming language "MclScript."
 
-MclScript combines all my favorites features of C and Python, but unlike either, it is completely whitespace agnostic; 
+MclScript combines all my favorite features of both C and Python, but unlike either, it is completely whitespace agnostic; 
 meaning an entire program can be written without a single space, tab, or newline (Aside from comments.) 
 It is currently in early development and still very limited. For example: only the integer datatype is currently supported. 
 However, I will occasionally return to improve and extend the language over time.
