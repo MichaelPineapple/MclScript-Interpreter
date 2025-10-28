@@ -4,33 +4,22 @@ namespace MclScript;
 
 public class MclScript
 {
-    public static void Main(string[] args)
+    public static int Main(string[] args)
     {
         string src = File.ReadAllText(args[0]);
         Token[] tokens = Tokenizer.Run(src);
-        Console.WriteLine(TokensToStr(tokens));
-        Instruction[] instructions = new Instruction[0];
         try
         {
-            instructions = Evaluator.Evaluate(tokens);
-            Console.WriteLine("*** ACCEPT ***");
+            GlobalGrammar global = new GlobalGrammar();
+            Dictionary<string, Function> funcMap = global.Run(tokens);
+            LocalGrammar local = new LocalGrammar();
+            return local.Run(funcMap, "main", new int[] {});
         }
         catch (Exception e)
         {
-            Console.WriteLine("*** REJECT ***");
+            Console.WriteLine("\n*** Interpretation Error ***");
             Console.WriteLine(e.Message);
-            return;
+            return -1;
         }
-        
-        Assembler.Run(instructions);
-    }
-
-    
-    
-    public static string TokensToStr(Token[] array)
-    {
-        string str = "";
-        foreach (Token t in array) str += (t.Type + " ");
-        return str.Trim();
     }
 }

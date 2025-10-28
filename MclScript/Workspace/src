@@ -1,32 +1,35 @@
 # this is a comment
 
 main()
-{
+{       
+    x = 10;
+    while (x)
+    {
+        x = x - 1;
+        if (x - 5) { print(x); }
+    }
     
+    print(9999999);
+    
+    a = 1; b = 2; c = 3; # comment
+    
+    d = func(0, a, b) + ((5 + (420 - 0) * c 
+            * (func((a + b) * c + 3, 1+2-7, 69)))) + 1;
+    
+    y = input();
+    if (y) { print(y); } # comment
+    else (1) { print(-100); }
+    
+    print(d);
 }
 
-func()
+# comment
+func(x, y, z)
 {
-
+    if (z) { # comment
+        return = (x + y + z);
+    }
+    else (1) {
+        return = ((x+y)-z);
+    }
 }
-
-#main()
-#{
-#    x = test(0, a, b,) + ((5 + (420 - 0) * y / (test((a + b) / c + 3, 1+2-7, 69))));
-#    if (a) 
-#    {
-#        while (1)
-#        {
-#            func();
-#            y = 1;
-#        }
-#        return(c);
-#    }
-#    print(balls); #comment
-#    x = 5;
-#}
-
-#func(a, b, c)
-#{
-#    return(a);
-#}

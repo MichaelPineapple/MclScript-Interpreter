@@ -19,7 +19,7 @@ public class Tokenizer
                 if (walk.Length > 0)
                 {
                     string type = "i";
-                    if (walk == "if" || walk == "while") type = "c";
+                    if (walk == "if" || walk == "while" || walk == "else") type = walk;
                     if ("0123456789".Contains(walk[0])) type = "n";
                     tokens.Add(new Token(type, walk));
                 }
