@@ -14,7 +14,7 @@ public class Tokenizer
             if (c == '#') comment = true;
             if ("\n$".Contains(c)) comment = false;
             if (" \n\t#".Contains(c) || comment) continue;
-            if ("(){}[]+-*/=,;$".Contains(c))
+            if ("=(){}[]+-*/%<:>!&|,;$".Contains(c))
             {
                 if (walk.Length > 0)
                 {

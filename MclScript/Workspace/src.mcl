@@ -1,0 +1,52 @@
+# this is a comment
+
+main()
+{       
+    e = calculate(1000);
+    print(e);
+    print(999999999);
+    
+    x = 0;
+    while (x < 10)
+    {
+        x = x + 1;
+        if (x : x) { print(x); }
+    }
+    
+    print(9999999);
+    
+    a = 1; b = 2; c = 3; # comment
+    
+    d = func(0, a, b) + ((5 + (420 - 0) * c 
+            * (func((a + b) * c + 3, 1+2-7, 69)))) + 1;
+    
+    y = input();
+    if (y > 0) { print(y); } # comment
+    else (1) { print(-100); }
+    
+    print(d);
+}
+
+# comment
+func(x, y, z)
+{
+    if (z > 0) { # comment
+        return = (x + y + z);
+    }
+    else (1) {
+        return = ((x+y)-z);
+    }
+}
+
+# Get all integers below 'n' that are multiples of 3 or 5
+calculate(n)
+{
+   sum = 0;
+   i = 1;
+   while (i < n)
+   {
+        if (((i % 3) : 0) | ((i % 5) : 0)) { sum = sum + i; }
+        i = i + 1;
+   }
+   return = sum;
+}

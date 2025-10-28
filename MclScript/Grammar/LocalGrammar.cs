@@ -75,7 +75,7 @@ public class LocalGrammar : Grammar
         }
         else if (Peek("(")) vl = ExpressionBlock();
         string op = Tokens[Index].Type;
-        if (!"+-*/".Contains(op)) return vl;
+        if (!"+-*/%&|<:>".Contains(op)) return vl;
         Accept(op);
         int vr = Expression();
         return ExecuteOperation(vl, vr, op);
@@ -94,6 +94,20 @@ public class LocalGrammar : Grammar
                 return l * r;
             case "/":
                 return l / r;
+            case "%":
+                return l % r;
+            case "&":
+                return (l > 0) && (r > 0) ? 1 : 0;
+            case "|":
+                return (l > 0) || (r > 0) ? 1 : 0;
+            case "<":
+                return l < r ? 1 : 0;
+            case ">":
+                return l > r ? 1 : 0;
+            case ":":
+                return l == r ? 1 : 0;
+            case "!":
+                return l != r ? 1 : 0;
             default:
                 Error("Unknown Operator: '" + op + "'");
                 return 0;
